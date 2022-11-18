@@ -12,6 +12,7 @@ namespace Blackjack
 {
     internal class Utils
     {
+        private static Random rnd = new Random();
         public static bool GetRandomBool()
         {
        
@@ -24,13 +25,6 @@ namespace Blackjack
                 return false;
         } 
 
-        public static int getRandomInt(int l, int m)
-        {
-            Random rnd = new Random();
-            int cf = rnd.Next(l, m);
-
-            return cf;
-        }
 
         public static void clearTextBlock()
         {
@@ -41,7 +35,7 @@ namespace Blackjack
         {
             String[] KaartenNamenRegulair = { "aas", "Boer", "Vrouw", "Heer" };
             String[] KaartenNamenIrregulair = { "Schoppen ♠", "Harten ♥", "Klaveren ♣", "Ruiten ♦" };
-            int cf = Utils.getRandomInt(0, 3);
+            int cf = rnd.Next(0, 3);
 
             if (kaartnr == 1)
             {
@@ -53,13 +47,13 @@ namespace Blackjack
             else if (kaartnr == 10)
             {
                 if (Utils.GetRandomBool())
-                    s = block.Text + "\n" + kaartnr + " " + KaartenNamenRegulair[Utils.getRandomInt(1, 3)];
+                    s = block.Text + "\n" + kaartnr + " " + KaartenNamenRegulair[rnd.Next(1, 3)];
                 else
                     s = block.Text + "\n" + kaartnr + " " + KaartenNamenIrregulair[cf];
             }
             else
             {
-                s = block.Text + "\n" + kaartnr + " " + KaartenNamenIrregulair[Utils.getRandomInt(0, 3)];
+                s = block.Text + "\n" + kaartnr + " " + KaartenNamenIrregulair[rnd.Next(0, 3)];
             }
 
             block.Text = s;

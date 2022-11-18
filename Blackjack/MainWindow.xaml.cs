@@ -27,6 +27,8 @@ namespace Blackjack
         protected static String KaartSpeler = "";
         protected static String KaartHuis = "";
         protected static Random rnd = new Random();
+        protected static bool deel = false;
+        protected static MainWindow window = null;
 
         
 
@@ -35,54 +37,50 @@ namespace Blackjack
         public MainWindow()
         {
             InitializeComponent();
+            window = this;
            
         
         }
 
         private void Deel_Click(object sender, RoutedEventArgs e)
         {
-
-            // Speler vraagt nieuwe kaarten aan.
-
-            Random rnd = new Random();
-            int kaart1 = rnd.Next(1, 21);
-            int kaart2 = rnd.Next(1, 21);
-
-            SpelerTotaal += kaart1;
-            SpelerTotaal += kaart2;
-
-            Utils.handleCards(KaartSpeler, kaart1, KaartenSpeler);
-            Utils.handleCards(KaartSpeler, kaart2, KaartenSpeler);
-
-            txtSpelerTotaal.Text = SpelerTotaal.ToString();
-
-            if (SpelerTotaal > 21)
+           
+            if (!deel)
             {
-                MessageBox.Show("You lost!");
-                SpelerTotaal = 0;
-                HuisTotaal = 0;
-                KaartenSpeler.Text = "";
-                KaartenHuis.Text = "";
-                txtSpelerTotaal.Text = "";
-                return;
-            }
+                deel= true;
+
+                Hit.IsEnabled = true;
+                Sta.IsEnabled = true;
+                Deel.IsEnabled = false;
+                // Speler vraagt nieuwe kaarten aan.
+                Random rnd = new Random();
+                int kaart1 = rnd.Next(1, 10);
+                int kaart2 = rnd.Next(1, 10);
+
+                SpelerTotaal += kaart1;
+                SpelerTotaal += kaart2;
+
+                Utils.handleCards(KaartSpeler, kaart1, KaartenSpeler);
+                Utils.handleCards(KaartSpeler, kaart2, KaartenSpeler);
+
+                txtSpelerTotaal.Text = SpelerTotaal.ToString();
 
 
-            // Huis trekt nieuwe 
-            int IHuis = rnd.Next(1, 21);
-            HuisTotaal += IHuis;
 
-            Utils.handleCards(KaartHuis, IHuis, KaartenHuis);
+                // Huis trekt nieuwe 
+                int IHuis = rnd.Next(1, 10);
+                HuisTotaal += IHuis;
+
+                Utils.handleCards(KaartHuis, IHuis, KaartenHuis);
+
+                txtHuisTotaal.Text = HuisTotaal.ToString();
 
 
-            if (HuisTotaal > 21)
+                Reset(window);
+            } 
+            else 
             {
-                MessageBox.Show("You Win!");
-                SpelerTotaal = 0;
-                HuisTotaal = 0;
-                KaartenHuis.Text = "";
-                KaartenSpeler.Text = "";
-                return;
+                MessageBox.Show("Je hebt al gedeeld!");
             }
 
 
@@ -91,22 +89,93 @@ namespace Blackjack
 
         private void Hit_Click(object sender, RoutedEventArgs e)
         {
-            int ISpeler = rnd.Next(1, 21);
+            if (deel) { 
+            int ISpeler = rnd.Next(1, 10);
             Utils.handleCards(KaartSpeler, ISpeler, KaartenSpeler);
 
             SpelerTotaal += ISpeler;
             txtSpelerTotaal.Text = SpelerTotaal.ToString();
 
+            Reset(window);
+            } else
+            {
+                MessageBox.Show("Je moet eerst delen!");
+            }
+        }
+
+
+
+        private void Sta_Click(object sender, RoutedEventArgs e)
+        {
+           
+            while (HuisTotaal < 16)
+            {
+                int kaart = rnd.Next(1, 10);
+                HuisTotaal += kaart;
+                Utils.handleCards(KaartHuis, kaart, KaartenHuis);
+                txtHuisTotaal.Text = HuisTotaal.ToString();
+            }
+            Reset(window);
+            Staan(window);
+        }
+
+        public static void Default(MainWindow mainWindow)
+        {
+            mainWindow.Hit.IsEnabled = false;
+            mainWindow.Sta.IsEnabled = false;
+            mainWindow.Deel.IsEnabled = true;
+            mainWindow.KaartenHuis.Text = "";
+            mainWindow.KaartenSpeler.Text = "";
+            mainWindow.txtHuisTotaal.Text = "";
+            mainWindow.txtSpelerTotaal.Text = "";
+            SpelerTotaal = 0;
+            HuisTotaal = 0;
+            deel = false;
+        }
+
+
+
+        public static void Reset(MainWindow mainWindow)
+        {
             if (SpelerTotaal > 21)
             {
                 MessageBox.Show("You lose!");
-                SpelerTotaal = 0;
-                HuisTotaal = 0;
-                KaartenHuis.Text = "";
-                KaartenSpeler.Text = "";
-                txtSpelerTotaal.Text = "";
+                Default(mainWindow);
+                return;
+            }
+
+            if (HuisTotaal > 21)
+            {
+                MessageBox.Show("You Win!");
+                Default(mainWindow);
+                return;
+            }
+        }
+
+
+        public static void Staan(MainWindow mainWindow)
+        {
+            if (SpelerTotaal > HuisTotaal)
+            {
+                MessageBox.Show("You Win!");
+                Default(mainWindow);
+                return;
+            }
+
+            if (SpelerTotaal == HuisTotaal)
+            {
+                MessageBox.Show("Draw!");
+                Default(mainWindow);
+                return;
+            }
+
+            if (SpelerTotaal < HuisTotaal)
+            {
+                MessageBox.Show("You lose!");
+                Default(mainWindow);
                 return;
             }
         }
     }
+
 }
