@@ -1,0 +1,23 @@
+﻿<Window x:Class="Blackjack.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blackjack"
+        mc:Ignorable="d"
+        Title="♠️ Blackjack" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="Sta" Content="Stand" HorizontalAlignment="Center" Height="27" Margin="0,226,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.185,0.525" Click="Deel_Click"/>
+        <Button x:Name="Hit" Content="Hit" HorizontalAlignment="Center" Height="26" Margin="0,172,0,0" VerticalAlignment="Top" Width="74" Click="Hit_Click"/>
+        <Button x:Name="Deel" Content="Deel" HorizontalAlignment="Center" Height="27" Margin="0,114,0,0" VerticalAlignment="Top" Width="74" Click="Deel_Click"/>
+        <Grid HorizontalAlignment="Left" Height="185" Margin="103,93,0,0" VerticalAlignment="Top" Width="140">
+            <Label Content="Speler" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="139"/>
+            <TextBlock x:Name="KaartenSpeler" HorizontalAlignment="Left" Margin="0,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="152" Width="139"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="185" Margin="538,93,0,0" VerticalAlignment="Top" Width="140">
+            <Label Content="Huis" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="139"/>
+            <TextBlock x:Name="KaartenHuis" HorizontalAlignment="Left" Margin="0,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="152" Width="139"/>
+        </Grid>
+        <TextBlock x:Name="txtSpelerTotaal" HorizontalAlignment="Left" Margin="0,344,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
+    </Grid>
+</Window>
