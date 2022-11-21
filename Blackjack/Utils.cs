@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Blackjack
 {
@@ -16,7 +20,6 @@ namespace Blackjack
         public static bool GetRandomBool()
         {
        
-            Random rnd = new Random();
             int cf = rnd.Next(1, 2);
 
             if (cf == 1)
@@ -26,40 +29,62 @@ namespace Blackjack
         } 
 
 
-        public static void clearTextBlock()
+        public static void handleCards(int i, String s, List<Kaarten> kaarten, TextBlock block) 
         {
-            
-        }
 
-        public static void handleCards(String s, int kaartnr, TextBlock block) 
-        {
-            String[] KaartenNamenRegulair = { "aas", "Boer", "Vrouw", "Heer" };
-            String[] KaartenNamenIrregulair = { "Schoppen ♠", "Harten ♥", "Klaveren ♣", "Ruiten ♦" };
-            int cf = rnd.Next(0, 3);
+           
+            Kaarten kaart = kaarten[i];
+            int addedInt = kaart.getNummer();
+            String addedString = kaart.getNaam();
+         
 
-            if (kaartnr == 1)
+            switch(i)
             {
-                if (Utils.GetRandomBool())
-                    s = block.Text + "\n" + kaartnr + " " + KaartenNamenRegulair[0];
-                else
-                    s = block.Text + "\n" + kaartnr + " " + KaartenNamenIrregulair[cf];
-            }
-            else if (kaartnr == 10)
-            {
-                if (Utils.GetRandomBool())
-                    s = block.Text + "\n" + kaartnr + " " + KaartenNamenRegulair[rnd.Next(1, 3)];
-                else
-                    s = block.Text + "\n" + kaartnr + " " + KaartenNamenIrregulair[cf];
-            }
-            else
-            {
-                s = block.Text + "\n" + kaartnr + " " + KaartenNamenIrregulair[rnd.Next(0, 3)];
-            }
+                case 1:
+                    if (Utils.GetRandomBool())
+                        s = block.Text + "\n" + addedInt + " " + addedString;               
+                    break;
 
+                case 10:
+                    if (Utils.GetRandomBool())
+                        s = block.Text + "\n" + addedInt + " " + addedString;
+                    break;
+
+                default:
+                    s = block.Text + "\n" + addedInt + " " + addedString;
+                    break;
+            }
             block.Text = s;
-
-        
-
+            kaarten.Remove(kaart);
         }
+
+
+        public static Image GetImage(String source)
+        {
+            Image myImage = new Image();
+            BitmapImage bitmap = new BitmapImage();
+
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(source);
+
+            bitmap.EndInit();
+            myImage.Source = bitmap;
+            return myImage;
+        }
+
+        public static void MoveTo(Image target, double newX, double newY)
+        {
+            var top = Canvas.GetTop(target);
+            var left = Canvas.GetLeft(target);
+            TranslateTransform trans = new TranslateTransform();
+            target.RenderTransform = trans;
+            DoubleAnimation anim1 = new DoubleAnimation(top, newY - top, TimeSpan.FromSeconds(10));
+            DoubleAnimation anim2 = new DoubleAnimation(left, newX - left, TimeSpan.FromSeconds(10));
+            trans.BeginAnimation(TranslateTransform.XProperty, anim1);
+            trans.BeginAnimation(TranslateTransform.YProperty, anim2);
+        }
+
     }
+
+
 }

@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="♠️ Blackjack" Height="450" Width="800">
     <Grid>
+        <Grid.Background>
+            <ImageBrush/>
+        </Grid.Background>
         <Button x:Name="Sta" Content="Stand" HorizontalAlignment="Center" Height="27" Margin="0,226,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.185,0.525" Click="Sta_Click" IsEnabled="False"/>
         <Button x:Name="Hit" Content="Hit" HorizontalAlignment="Center" Height="26" Margin="0,172,0,0" VerticalAlignment="Top" Width="74" Click="Hit_Click" IsEnabled="False"/>
         <Button x:Name="Deel" Content="Deel" HorizontalAlignment="Center" Height="27" Margin="0,114,0,0" VerticalAlignment="Top" Width="74" Click="Deel_Click"/>
