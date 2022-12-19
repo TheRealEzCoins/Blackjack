@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace Blackjack
 {
@@ -11,16 +13,18 @@ namespace Blackjack
     public partial class MainWindow : Window
     {
 
-        protected static int SpelerTotaal = 0;
-        protected static int HuisTotaal = 0;
+        private static List<Kaarten> SpeelerHand = new List<Kaarten>();
+        private static List<Kaarten> DealerHand = new List<Kaarten>();
+        public static int SpelerTotaal = 0;
+        public static int HuisTotaal = 0;
         protected static String KaartSpeler = "";
         protected static String KaartHuis = "";
         protected static Random rnd = new Random();
-        protected static bool deel = false;
-        protected static MainWindow window = null;
-        protected static String[] KaartenNamenIrregulair = { "Schoppen", "Harten", "Klaveren", "Ruiten" };
-        protected static String[] KaartenNamenRegulair = { "boer", "vrouw", "heer" };
-        private static List<Kaarten> KaartenLijst = new List<Kaarten>();
+        private static MainWindow window = null;
+
+       
+       
+        public static GameState gameState;
 
 
 
@@ -30,49 +34,50 @@ namespace Blackjack
         {
             InitializeComponent();
             window = this;
-
-            fillList();
+            Utils.Shuffle();
         
         }
 
         private void Deel_Click(object sender, RoutedEventArgs e)
         {
-           
-            if (!deel)
-            {
-                deel= true;
+
+            if (gameState.Equals(GameState.Stopped))
+            { 
+                gameState = GameState.Running;
 
                 Hit.IsEnabled = true;
                 Sta.IsEnabled = true;
                 Deel.IsEnabled = false;
-                // Speler vraagt nieuwe kaarten aan.
-                Random rnd = new Random();
-                int kaart1 = rnd.Next(KaartenLijst.Count);
-                int kaart2 = rnd.Next(KaartenLijst.Count);
 
-                int toevoeging1 = KaartenLijst[kaart1].getNummer();
-                int toevoeging2 = KaartenLijst[kaart2].getNummer();
-                SpelerTotaal += toevoeging1;
-                SpelerTotaal += toevoeging2;
-
-                Utils.handleCards(kaart1, KaartSpeler, KaartenLijst, KaartenSpeler);
-                Utils.handleCards(kaart2, KaartSpeler, KaartenLijst, KaartenSpeler);
+                // Speler trekt kaarten
+                for(int i = 0; i < 2; i++)
+                {
+                    Kaarten kaart = Utils.randomKaart();
+                    SpeelerHand.Add(kaart);
+                    int Toevoeging = kaart.getNummer();
+                    SpelerTotaal += Toevoeging;
+                    Utils.handleCards(kaart, KaartSpeler, KaartenSpeler);
+                }
 
                 txtSpelerTotaal.Text = SpelerTotaal.ToString();
 
 
 
-                // Huis trekt nieuwe 
-                int huiskaart1 = rnd.Next(KaartenLijst.Count);
-                int toevoeginghuis1 = KaartenLijst[huiskaart1].getNummer();
-                HuisTotaal += toevoeginghuis1;
 
-                Utils.handleCards(huiskaart1, KaartHuis, KaartenLijst, KaartenHuis);
+                // Huis trekt kaarten
+                for (int i = 0; i < 2; i++)
+                {
+                        Kaarten kaart = Utils.randomKaart();
+                        DealerHand.Add(kaart);
+                        HuisTotaal += kaart.getNummer();
+                        Utils.handleCards(kaart, KaartHuis, KaartenHuis);
+                }
+               
 
                 txtHuisTotaal.Text = HuisTotaal.ToString();
 
 
-                Reset(window);
+                KnoppenUtils.Reset();
             } 
             else 
             {
@@ -85,15 +90,14 @@ namespace Blackjack
 
         private void Hit_Click(object sender, RoutedEventArgs e)
         {
-            if (deel) { 
-            int Kaart1 = rnd.Next(KaartenLijst.Count);
-            Utils.handleCards(Kaart1, KaartSpeler, KaartenLijst, KaartenSpeler);
-                int toevoeging = KaartenLijst[Kaart1].getNummer();
+            if (gameState.Equals(GameState.Running)) {
+            Kaarten Kaart = Utils.randomKaart();
+            Utils.handleCards(Kaart, KaartSpeler, KaartenSpeler);
                     
-            SpelerTotaal += toevoeging;
+            SpelerTotaal += Kaart.getNummer();
             txtSpelerTotaal.Text = SpelerTotaal.ToString();
 
-            Reset(window);
+            KnoppenUtils.Reset();
             } else
             {
                 MessageBox.Show("Je moet eerst delen!");
@@ -107,103 +111,39 @@ namespace Blackjack
            
             while (HuisTotaal < 16)
             {
-                int kaart = rnd.Next(KaartenLijst.Count);
-                int toevoeging = KaartenLijst[kaart].getNummer();
+                Kaarten kaart = Utils.randomKaart();
 
-                HuisTotaal += toevoeging;
-                Utils.handleCards(kaart, KaartHuis, KaartenLijst, KaartenHuis);
+                HuisTotaal += kaart.getNummer();
+                Utils.handleCards(kaart, KaartHuis, KaartenHuis);
                 txtHuisTotaal.Text = HuisTotaal.ToString();
             }
-            Reset(window);
-                Staan(window);
+            KnoppenUtils.Reset();
+            KnoppenUtils.Staan();
             
         }
 
-        public static void Default(MainWindow mainWindow)
+      
+
+
+
+      
+
+
+
+        public static MainWindow GetClass()
         {
-            mainWindow.Hit.IsEnabled = false;
-            mainWindow.Sta.IsEnabled = false;
-            mainWindow.Deel.IsEnabled = true;
-            mainWindow.KaartenHuis.Text = "";
-            mainWindow.KaartenSpeler.Text = "";
-            mainWindow.txtHuisTotaal.Text = "";
-            mainWindow.txtSpelerTotaal.Text = "";
-            SpelerTotaal = 0;
-            HuisTotaal = 0;
-            deel = false;
-            fillList();
+            return window;
+        }
+
+        public static List<Kaarten> GetSpelerHand()
+        {
+            return SpeelerHand;
         }
 
 
+       
 
-        public static void Reset(MainWindow mainWindow)
-        {
-            if (SpelerTotaal > 21)
-            {
-                MessageBox.Show("You lose!");
-                Default(mainWindow);
-                return;
-            }
-
-            if (HuisTotaal > 21)
-            {
-                MessageBox.Show("You Win!");
-                Default(mainWindow);
-                return;
-            }
-        }
-
-
-        public static void Staan(MainWindow mainWindow)
-        {
-            if (SpelerTotaal > HuisTotaal)
-            {
-                MessageBox.Show("Gewonnen!");
-                Default(mainWindow);
-                return;
-            }
-
-            if (SpelerTotaal == HuisTotaal)
-            {
-                MessageBox.Show("Push!");
-                Default(mainWindow);
-                return;
-            }
-
-            if (SpelerTotaal < HuisTotaal)
-            {
-                MessageBox.Show("Verloren!");
-                Default(mainWindow);
-                return;
-            }
-        }
-
-        public static void fillList()
-        {
-            for (int i = 2; i < 11; i++)
-            {
-                foreach (string s in KaartenNamenIrregulair)
-                {
-                    if (!KaartenLijst.Contains(new Kaarten(s, i)))
-                    {
-                        KaartenLijst.Add(new Kaarten(s, i));
-                    }
-                }
-            }
-
-            foreach (string s in KaartenNamenRegulair)
-            {
-                if (!KaartenLijst.Contains(new Kaarten(s, 10)))
-                {
-                    KaartenLijst.Add(new Kaarten(s, 10));
-                }
-            }
-
-            for(int i = 1; i < 5; i++)
-            {
-                KaartenLijst.Add(new Kaarten("aas", 1, Utils.GetImage("C:\\Users\\steve\\source\\repos\\Blackjack\\Blackjack\\Assets\\aas.png")));
-            }
-        }
+       
     }
 
 

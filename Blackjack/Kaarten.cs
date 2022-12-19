@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace Blackjack
 {
@@ -14,18 +15,18 @@ namespace Blackjack
     {
         private string naam;
         private int nummer;
-        private Image image;
-        public Kaarten(String naam, int nummer, Image image) {
-            this.naam = naam;
-            this.image = image;
-            this.nummer = nummer;
+        private BitmapImage bitmap;
 
+        public Kaarten(String naam, int nummer, BitmapImage bitmap) {
+            this.naam = naam;
+            this.bitmap = bitmap;
+            this.nummer = nummer;
         }
 
         public Kaarten(String naam, int nummer)
         {
             this.naam = naam;
-            this.image = null;
+            this.bitmap = null;
             this.nummer = nummer;
 
         }
@@ -41,9 +42,9 @@ namespace Blackjack
         }
 
        
-        public Image getImage() 
+        public BitmapImage getBitmap() 
         {
-            return image;
+            return bitmap;
         }
       
     }
