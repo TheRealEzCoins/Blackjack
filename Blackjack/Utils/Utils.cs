@@ -125,6 +125,7 @@ namespace Blackjack
             mainWindow.KaartenSpeler.Text = "";
             mainWindow.txtHuisTotaal.Text = "";
             mainWindow.txtSpelerTotaal.Text = "";
+            mainWindow.Inzet.Text = "0";
             Shuffle();
         }
 
