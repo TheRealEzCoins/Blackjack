@@ -7,15 +7,9 @@
         mc:Ignorable="d"
         Title="♠️ Blackjack" Height="450" Width="800">
     <Grid>
-<<<<<<< HEAD
-        <Button x:Name="Sta" Content="Stand" HorizontalAlignment="Center" Height="27" Margin="0,239,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.197,-0.788" Click="Sta_Click" IsEnabled="False"/>
-        <Button x:Name="Hit" Content="Hit" HorizontalAlignment="Center" Height="26" VerticalAlignment="Top" Width="74" Click="Hit_Click" IsEnabled="False" Margin="0,199,0,0"/>
-        <Button x:Name="Deel" Content="Deel" HorizontalAlignment="Center" Height="28" Margin="0,158,0,0" VerticalAlignment="Top" Width="74" Click="Deel_Click"/>
-=======
         <Button x:Name="Sta" Content="Stand" HorizontalAlignment="Center" Height="27" Margin="0,226,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.185,0.525" Click="Sta_Click" IsEnabled="False"/>
         <Button x:Name="Hit" Content="Hit" HorizontalAlignment="Center" Height="26" Margin="0,172,0,0" VerticalAlignment="Top" Width="74" Click="Hit_Click" IsEnabled="False"/>
         <Button x:Name="Deel" Content="Deel" HorizontalAlignment="Center" Height="27" Margin="0,114,0,0" VerticalAlignment="Top" Width="74" Click="Deel_Click"/>
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
         <Grid HorizontalAlignment="Left" Height="185" Margin="103,93,0,0" VerticalAlignment="Top" Width="140">
             <Label Content="Speler" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="139"/>
             <TextBlock x:Name="KaartenSpeler" HorizontalAlignment="Left" Margin="0,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="152" Width="139"/>
@@ -27,13 +21,5 @@
         <TextBlock x:Name="txtSpelerTotaal" HorizontalAlignment="Left" Margin="0,344,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
         <TextBlock x:Name="txtHuisTotaal" HorizontalAlignment="Left" Margin="711,344,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
         <Image x:Name="Kaart" HorizontalAlignment="Left" Height="100" Margin="304,310,0,0" VerticalAlignment="Top" Width="100"/>
-<<<<<<< HEAD
-        <Slider x:Name="Bet" HorizontalAlignment="Left" Margin="91,64,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged" Maximum="1000" LargeChange="50" SmallChange="10" TickFrequency="50" TickPlacement="TopLeft" IsSnapToTickEnabled="True"/>
-        <TextBlock x:Name="BetBlock" HorizontalAlignment="Left" Margin="91,43,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.562" Width="120"/>
-        <TextBlock x:Name="Kapitaal" HorizontalAlignment="Left" Margin="91,22,0,0" TextWrapping="Wrap" Text="Kapitaal: " VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.562" Width="120"/>
-        <Button x:Name="Double" Content="Double" HorizontalAlignment="Center" Height="28" Margin="0,118,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.185,0.525" IsEnabled="False" Click="Double_Click"/>
-        <TextBlock x:Name="Inzet" HorizontalAlignment="Center" Margin="0,22,0,0" TextWrapping="Wrap" Text="Inzet:" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.562" Width="120"/>
-=======
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
     </Grid>
 </Window>
