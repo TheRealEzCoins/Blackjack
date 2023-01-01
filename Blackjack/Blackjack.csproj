@@ -35,7 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>blackjack.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -66,7 +67,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="Enums\PlayerType.cs" />
     <Compile Include="Enums\GameState.cs" />
     <Compile Include="Handlers\ImageHandler.cs" />
@@ -74,12 +74,6 @@
     <Compile Include="Utils\KnoppenUtils.cs" />
     <Compile Include="Constructors\Speler.cs" />
     <Compile Include="Utils\Utils.cs" />
-=======
-    <Compile Include="GameState.cs" />
-    <Compile Include="Kaarten.cs" />
-    <Compile Include="KnoppenUtils.cs" />
-    <Compile Include="Utils.cs" />
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -110,9 +104,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="blackjack.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\aas.jpg" />
