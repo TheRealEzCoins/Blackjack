@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    public class GameState
-    {
-        public enum GameStatus
-        {
-            Enabled,
-            Disabled
-        }
-
-        
+    public enum GameState
+    { 
+        Running,
+        Stopped      
     }
 }
