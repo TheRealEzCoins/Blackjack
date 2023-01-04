@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Blackjack
 {
@@ -82,32 +84,32 @@ namespace Blackjack
         public static void Shuffle()
         {
             String[] KaartenNamenIrregulair = { "Schoppen", "Harten", "Klaveren", "Ruiten" };
-            String[] KaartenNamenRegulair = { "boer", "vrouw", "heer" };
+            String[] KaartenNamenRegulair = { "Boer", "Dame", "Koning" };
             MainWindow.gameState = GameState.Stopped;
+           
 
             for (int i = 2; i < 11; i++)
             {
                 foreach (string s in KaartenNamenIrregulair)
                 {
-                    if (!Kaarten.KaartenLijst.Contains(new Kaarten(s, i)))
+                    if (!Kaarten.KaartenLijst.Contains(new Kaarten(s, i, GetBitmapImage(s, i))))
                     {
-                        new Kaarten(s, i);
+                        new Kaarten(s, i, GetBitmapImage(s, i));
                     }
                 }
             }
 
             foreach (string s in KaartenNamenRegulair)
             {
-                if (!Kaarten.KaartenLijst.Contains(new Kaarten(s, 10)))
+                if (!Kaarten.KaartenLijst.Contains(new Kaarten(s, 10, GetBitmapImage(s, 10))))
                 {
-                    new Kaarten(s, 10);
+                    new Kaarten(s, 10, GetBitmapImage(s, 10));
                 }
             }
 
-            for (int i = 1; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
-                BitmapImage image = new BitmapImage(new Uri("aas.jpg", UriKind.Relative));
-                new Kaarten("aas", 1, image);
+                new Kaarten("aas", 1, GetBitmapImage("Aas", i));
             }
         }
 
@@ -126,6 +128,7 @@ namespace Blackjack
             mainWindow.txtHuisTotaal.Text = "";
             mainWindow.txtSpelerTotaal.Text = "";
             mainWindow.Inzet.Text = "0";
+            isRevealed = false;
             Shuffle();
         }
 
@@ -182,8 +185,14 @@ namespace Blackjack
             Utils.restartGame();
             return;
         }
-    }
 
+        public static BitmapImage GetBitmapImage(String naam, int nummer)
+        {
+            BitmapImage image = new BitmapImage(new Uri("img/" + naam + "-" + nummer + ".png", UriKind.Relative));
+            return image;
+        }
+    }
+        
   
 
 

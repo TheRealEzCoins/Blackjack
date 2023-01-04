@@ -6,18 +6,11 @@ namespace Blackjack
 {
     internal class ImageHandler
     {
-        public static void sourceImage()
-        {
-            
-        }
 
-
-        public static Image createImage(Kaarten kaart)
+        public static void setImage(BitmapImage image)
         {
-            BitmapImage image = kaart.getBitmap();
-            Image img = new Image();
-            img.Source = image;
-            return img;
+           MainWindow.GetClass().Kaart.Source = image;
         }
     }
+
 }

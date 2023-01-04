@@ -1,35 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+
 using System.Windows.Controls;
-=======
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
->>>>>>>>> Temporary merge branch 2
-=======
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
->>>>>>>>> Temporary merge branch 2
-=======
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
->>>>>>>>> Temporary merge branch 2
-=======
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
->>>>>>>>> Temporary merge branch 2
 
 namespace Blackjack
 {
@@ -60,58 +33,14 @@ namespace Blackjack
 
         private void Deel_Click(object sender, RoutedEventArgs e)
         {
-
-<<<<<<<<< Temporary merge branch 1
-=========
-<<<<<<< HEAD
-            int SetBet = (int) Math.Round(Bet.Value, 0);
-            if (Utils.ValidateMoney(SetBet ,Speler.GetSpeler(PlayerType.Speler)))
+           
+            int SetBet = (int)Math.Round(Bet.Value, 0);
+            if (Utils.ValidateMoney(SetBet, Speler.GetSpeler(PlayerType.Speler)))
             {
                 KnoppenUtils.Deel();
-=======
->>>>>>>>> Temporary merge branch 2
-            if (gameState.Equals(GameState.Stopped))
-            { 
-                gameState = GameState.Running;
+            }
 
-                Hit.IsEnabled = true;
-                Sta.IsEnabled = true;
-                Deel.IsEnabled = false;
-
-                // Speler trekt kaarten
-                for(int i = 0; i < 2; i++)
-                {
-                    Kaarten kaart = Utils.randomKaart();
-                    SpeelerHand.Add(kaart);
-                    int Toevoeging = kaart.getNummer();
-                    SpelerTotaal += Toevoeging;
-                    Utils.handleCards(kaart, KaartSpeler, KaartenSpeler);
-                }
-
-                txtSpelerTotaal.Text = SpelerTotaal.ToString();
-
-
-
-
-                // Huis trekt kaarten
-                for (int i = 0; i < 2; i++)
-                {
-                        Kaarten kaart = Utils.randomKaart();
-                        DealerHand.Add(kaart);
-                        HuisTotaal += kaart.getNummer();
-                        Utils.handleCards(kaart, KaartHuis, KaartenHuis);
-                }
-               
-
-                txtHuisTotaal.Text = HuisTotaal.ToString();
-
-
-                KnoppenUtils.Reset();
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
->>>>>>>>> Temporary merge branch 2
-            } 
+           
         }
 
         private void Hit_Click(object sender, RoutedEventArgs e)
@@ -123,6 +52,7 @@ namespace Blackjack
                 Utils.handleCards(Kaart, KaartenSpeler);
                 txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();
 
+                ImageHandler.setImage(Kaart.getBitmap());
                 Double.IsEnabled = false;
                 KnoppenUtils.Reset();
             }
@@ -172,14 +102,6 @@ namespace Blackjack
             }
         }
 
-
-       
-
-       
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> 2eee5f2ce0f532acaf3200c32671bf80028f0337
->>>>>>>>> Temporary merge branch 2
     }
 
 

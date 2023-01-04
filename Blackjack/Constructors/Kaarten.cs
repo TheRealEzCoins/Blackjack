@@ -50,5 +50,13 @@ namespace Blackjack
             return bitmap;
         }
 
+        public Image GetImage()
+        {
+            BitmapImage image = this.getBitmap();
+            Image img = new Image();
+            img.Source = image;
+            return img;
+        }
+
     }
 }
