@@ -80,7 +80,6 @@ namespace Blackjack
                     Kaarten kaart = Utils.randomKaart();
                     Speler.GetSpeler(PlayerType.Speler).VoegKaartToe(kaart);
                     Utils.handleCards(kaart, window.KaartenSpeler);
-                    ImageHandler.setImage(kaart.getBitmap());
                 }
 
                 window.txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();

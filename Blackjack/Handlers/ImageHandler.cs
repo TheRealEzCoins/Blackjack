@@ -7,9 +7,9 @@ namespace Blackjack
     internal class ImageHandler
     {
 
-        public static void setImage(BitmapImage image)
+        public static void setImage(BitmapImage image, Speler speler)
         {
-           MainWindow.GetClass().Kaart.Source = image;
+           speler.GetImage().Source = image;
         }
     }
 

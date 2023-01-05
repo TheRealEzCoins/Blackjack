@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Controls;
 
 namespace Blackjack
 {
@@ -13,8 +14,16 @@ namespace Blackjack
         public static List<Speler> Spelers = new List<Speler>();
         private PlayerType PlayerType { get; set; }
         private int Bet;
+        private Image Slot;
         public Speler(PlayerType type, String naam, int geld)
         {
+            if(type == PlayerType.Huis)
+            {
+                Slot = MainWindow.GetClass().KaartHuis;
+            } else
+            {
+                Slot = MainWindow.GetClass().KaartSpeler;
+            }
             Naam = naam;
             Geld = geld;
             Kaarten = new List<Kaarten>();
@@ -26,6 +35,14 @@ namespace Blackjack
 
         public Speler(PlayerType type, String naam)
         {
+            if (type == PlayerType.Huis)
+            {
+                Slot = MainWindow.GetClass().KaartHuis;
+            }
+            else
+            {
+                Slot = MainWindow.GetClass().KaartSpeler;
+            }
             Naam = naam;
             Geld = 0;
             Kaarten = new List<Kaarten>();
@@ -39,6 +56,11 @@ namespace Blackjack
         public int GetBet()
         {
             return Bet;
+        }
+
+        public Image GetImage()
+        {
+            return Slot;
         }
 
         public void RemoveGeld(int value)

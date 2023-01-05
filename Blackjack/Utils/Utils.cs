@@ -37,10 +37,14 @@ namespace Blackjack
         {
             MainWindow window = MainWindow.GetClass();
             if (block == window.KaartenSpeler)
+            {
                 block.Text = Speler.GetSpeler(PlayerType.Speler).VertaalKaart();
+                ImageHandler.setImage(kaart.getBitmap(), Speler.GetSpeler(PlayerType.Speler));
+            }
             if (block == window.KaartenHuis)
             {
                 block.Text = Speler.GetSpeler(PlayerType.Huis).VertaalKaart();
+                ImageHandler.setImage(kaart.getBitmap(), Speler.GetSpeler(PlayerType.Huis));
             }
             Kaarten.KaartenLijst.Remove(kaart);
         }
@@ -57,6 +61,7 @@ namespace Blackjack
                     int nr = kaart.getNummer();
                     string naam = kaart.getNaam();
                     block.Text = block.Text + nr + " " + naam + "\n";
+                    ImageHandler.setImage(kaart.getBitmap(), Speler.GetSpeler(PlayerType.Huis));
                 }
                 else
                 {
@@ -99,17 +104,19 @@ namespace Blackjack
                 }
             }
 
-            foreach (string s in KaartenNamenRegulair)
+
+            foreach(string irr in KaartenNamenIrregulair)
             {
-                if (!Kaarten.KaartenLijst.Contains(new Kaarten(s, 10, GetBitmapImage(s, 10))))
+                foreach(string s in KaartenNamenRegulair)
                 {
-                    new Kaarten(s, 10, GetBitmapImage(s, 10));
+                  new Kaarten(irr + " " + s, 10, GetBitmapImage(irr, s));
                 }
             }
 
-            for (int i = 0; i < 5; i++)
+
+            foreach(String s in KaartenNamenIrregulair)
             {
-                new Kaarten("aas", 1, GetBitmapImage("Aas", i));
+                new Kaarten(s, 0, GetBitmapImage(s, 0), true);
             }
         }
 
@@ -128,6 +135,8 @@ namespace Blackjack
             mainWindow.txtHuisTotaal.Text = "";
             mainWindow.txtSpelerTotaal.Text = "";
             mainWindow.Inzet.Text = "0";
+            mainWindow.KaartHuis.Source = null;
+            mainWindow.KaartSpeler.Source = null;
             isRevealed = false;
             Shuffle();
         }
@@ -188,8 +197,20 @@ namespace Blackjack
 
         public static BitmapImage GetBitmapImage(String naam, int nummer)
         {
-            BitmapImage image = new BitmapImage(new Uri("img/" + naam + "-" + nummer + ".png", UriKind.Relative));
-            return image;
+            if(nummer == 0)
+                return new BitmapImage(new Uri("img/" + naam + "-aas" + ".png", UriKind.Relative));
+            else
+                return new BitmapImage(new Uri("img/" + naam + "-" + nummer + ".png", UriKind.Relative));
+
+          
+        }
+
+        public static BitmapImage GetBitmapImage(String vorm, String naam)
+        {
+            
+                return new BitmapImage(new Uri("img/" + vorm + "-" + naam + ".png", UriKind.Relative));
+
+
         }
     }
         

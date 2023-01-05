@@ -52,7 +52,7 @@ namespace Blackjack
                 Utils.handleCards(Kaart, KaartenSpeler);
                 txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();
 
-                ImageHandler.setImage(Kaart.getBitmap());
+                ImageHandler.setImage(Kaart.getBitmap(), Speler.GetSpeler(PlayerType.Speler));
                 Double.IsEnabled = false;
                 KnoppenUtils.Reset();
             }

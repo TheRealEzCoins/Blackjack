@@ -16,23 +16,26 @@ namespace Blackjack
         private string naam;
         private int nummer;
         private BitmapImage bitmap;
+        private bool IsAas;
 
         public Kaarten(String naam, int nummer, BitmapImage bitmap)
         {
             this.naam = naam;
             this.bitmap = bitmap;
             this.nummer = nummer;
+            IsAas = false;
             KaartenLijst.Add(this);
         }
 
-        public Kaarten(String naam, int nummer)
+        public Kaarten(String naam, int nummer, BitmapImage bitmap, bool isAas)
         {
             this.naam = naam;
-            bitmap = null;
-            this.bitmap = null;
+            this.bitmap = bitmap;
             this.nummer = nummer;
+            IsAas = isAas;
             KaartenLijst.Add(this);
         }
+
 
         public string getNaam()
         {
