@@ -14,16 +14,9 @@ namespace Blackjack
         public static List<Speler> Spelers = new List<Speler>();
         private PlayerType PlayerType { get; set; }
         private int Bet;
-        private Image Slot;
         public Speler(PlayerType type, String naam, int geld)
         {
-            if(type == PlayerType.Huis)
-            {
-                Slot = MainWindow.GetClass().KaartHuis;
-            } else
-            {
-                Slot = MainWindow.GetClass().KaartSpeler;
-            }
+           
             Naam = naam;
             Geld = geld;
             Kaarten = new List<Kaarten>();
@@ -35,14 +28,7 @@ namespace Blackjack
 
         public Speler(PlayerType type, String naam)
         {
-            if (type == PlayerType.Huis)
-            {
-                Slot = MainWindow.GetClass().KaartHuis;
-            }
-            else
-            {
-                Slot = MainWindow.GetClass().KaartSpeler;
-            }
+           
             Naam = naam;
             Geld = 0;
             Kaarten = new List<Kaarten>();
@@ -58,14 +44,15 @@ namespace Blackjack
             return Bet;
         }
 
-        public Image GetImage()
-        {
-            return Slot;
-        }
 
         public void RemoveGeld(int value)
         {
             Geld =- value;
+        }
+
+        public PlayerType GetPlayerType()
+        {
+            return PlayerType;
         }
 
         public int TotaalAantal()
@@ -86,6 +73,16 @@ namespace Blackjack
 
         public void VoegKaartToe(Kaarten kaart)
         {
+            if (kaart.getNummer() == 0)
+            {
+                if(TotaalAantal() + 11 < 21)
+                {
+                    kaart.setNummer(11);
+                } else
+                {
+                    kaart.setNummer(1);
+                }
+            }
             Kaarten.Add(kaart);
         }
         

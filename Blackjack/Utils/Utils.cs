@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Security.Policy;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Blackjack
 {
@@ -35,18 +31,24 @@ namespace Blackjack
 
         public static void handleCards(Kaarten kaart, TextBlock block)
         {
+            if (Kaarten.KaartenLijst.Count == 0)
+            {
+                Utils.Shuffle();
+            }
             MainWindow window = MainWindow.GetClass();
             if (block == window.KaartenSpeler)
             {
                 block.Text = Speler.GetSpeler(PlayerType.Speler).VertaalKaart();
-                ImageHandler.setImage(kaart.getBitmap(), Speler.GetSpeler(PlayerType.Speler));
+                int i = Speler.GetSpeler(PlayerType.Speler).getKaarten().Count - 1;
+                ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Speler));
             }
             if (block == window.KaartenHuis)
             {
                 block.Text = Speler.GetSpeler(PlayerType.Huis).VertaalKaart();
-                ImageHandler.setImage(kaart.getBitmap(), Speler.GetSpeler(PlayerType.Huis));
+                ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Huis));
             }
             Kaarten.KaartenLijst.Remove(kaart);
+            window.AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
         }
 
         public static void handleHiddenCard(Kaarten kaart, TextBlock block)
@@ -56,20 +58,22 @@ namespace Blackjack
                 block.Text = Speler.GetSpeler(PlayerType.Speler).VertaalKaart();
             if (block == window.KaartenHuis)
             {
-                if (isRevealed)
+                if (!isRevealed)
+                {
+                    block.Text = block.Text + "????" + "\n";
+                    isRevealed = true;
+                    ImageHandler.setHiddenImage(Speler.GetSpeler(PlayerType.Huis));
+                }
+                else
                 {
                     int nr = kaart.getNummer();
                     string naam = kaart.getNaam();
                     block.Text = block.Text + nr + " " + naam + "\n";
-                    ImageHandler.setImage(kaart.getBitmap(), Speler.GetSpeler(PlayerType.Huis));
-                }
-                else
-                {
-                    block.Text = block.Text + "????" + "\n";
-                    isRevealed = true;
+                    ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Huis));
                 }
             }
             Kaarten.KaartenLijst.Remove(kaart);
+            window.AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
         }
 
         public static string readList(List<Kaarten> list)
@@ -135,10 +139,11 @@ namespace Blackjack
             mainWindow.txtHuisTotaal.Text = "";
             mainWindow.txtSpelerTotaal.Text = "";
             mainWindow.Inzet.Text = "0";
-            mainWindow.KaartHuis.Source = null;
-            mainWindow.KaartSpeler.Source = null;
             isRevealed = false;
-            Shuffle();
+            ImageHandler.IsHidden = true;
+            mainWindow.SpelerCanvas.Children.Clear();
+            mainWindow.HuisCanvas.Children.Clear();
+            MainWindow.gameState = GameState.Stopped;
         }
 
         public static bool ValidateMoney(int input, Speler speler)
@@ -206,11 +211,16 @@ namespace Blackjack
         }
 
         public static BitmapImage GetBitmapImage(String vorm, String naam)
-        {
-            
+        {        
                 return new BitmapImage(new Uri("img/" + vorm + "-" + naam + ".png", UriKind.Relative));
+        }
 
-
+        public static Image TranslateBitMapImage(BitmapImage bitmapImage)
+        {
+            BitmapImage image = bitmapImage;
+            Image img = new Image();
+            img.Source = image;
+            return img;
         }
     }
         

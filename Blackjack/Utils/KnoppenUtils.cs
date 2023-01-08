@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Blackjack
 {
@@ -41,7 +42,7 @@ namespace Blackjack
             }
         }
 
-        public static void Reset()
+        public static void checkState()
         {
             int SpelerTotaal = Speler.GetSpeler(PlayerType.Speler).TotaalAantal();
             int HuisTotaal = Speler.GetSpeler(PlayerType.Huis).TotaalAantal();
@@ -65,7 +66,6 @@ namespace Blackjack
             if (MainWindow.gameState.Equals(GameState.Stopped))
             {
                 MainWindow.gameState = GameState.Running;
-
                 window.Hit.IsEnabled = true;
                 window.Sta.IsEnabled = true;
                 window.Deel.IsEnabled = false;
@@ -77,6 +77,10 @@ namespace Blackjack
                 // Speler trekt kaarten
                 for (int i = 0; i < 2; i++)
                 {
+                    if(Kaarten.KaartenLijst.Count == 0)
+                    {
+                        Utils.Shuffle();
+                    }
                     Kaarten kaart = Utils.randomKaart();
                     Speler.GetSpeler(PlayerType.Speler).VoegKaartToe(kaart);
                     Utils.handleCards(kaart, window.KaartenSpeler);
@@ -90,8 +94,11 @@ namespace Blackjack
                 // Huis trekt kaarten
                 for (int i = 0; i < 2; i++)
                 {
+                    if (Kaarten.KaartenLijst.Count == 0)
+                    {
+                        Utils.Shuffle();
+                    }
                     Kaarten kaart = Utils.randomKaart();
-
                     Speler.GetSpeler(PlayerType.Huis).VoegKaartToe(kaart);
                     Utils.handleHiddenCard(kaart, window.KaartenHuis);
                 }
@@ -100,7 +107,7 @@ namespace Blackjack
                 window.txtHuisTotaal.Text = Speler.GetSpeler(PlayerType.Huis).TotaalAantal().ToString();
 
 
-                KnoppenUtils.Reset();
+                KnoppenUtils.checkState();
             }
             else
             {

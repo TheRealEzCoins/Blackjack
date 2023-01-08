@@ -27,6 +27,7 @@ namespace Blackjack
             new Speler(PlayerType.Huis, "Huis");
 
             Utils.Shuffle();
+            AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
             Kapitaal.Text = Speler.GetSpeler(PlayerType.Speler).GetGeld().ToString();
 
         }
@@ -51,10 +52,10 @@ namespace Blackjack
                 Speler.GetSpeler(PlayerType.Speler).VoegKaartToe(Kaart);
                 Utils.handleCards(Kaart, KaartenSpeler);
                 txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();
-
-                ImageHandler.setImage(Kaart.getBitmap(), Speler.GetSpeler(PlayerType.Speler));
+                ImageHandler.revealImage();
+              
                 Double.IsEnabled = false;
-                KnoppenUtils.Reset();
+                KnoppenUtils.checkState();
             }
             else
             {
@@ -67,6 +68,7 @@ namespace Blackjack
         private void Sta_Click(object sender, RoutedEventArgs e)
         {
             Double.IsEnabled = false;
+            ImageHandler.revealImage();
             while (Speler.GetSpeler(PlayerType.Huis).TotaalAantal() < 16)
             {
                 Kaarten kaart = Utils.randomKaart();
@@ -102,6 +104,27 @@ namespace Blackjack
             }
         }
 
+        private void Debug_Click(object sender, RoutedEventArgs e)
+        {
+            if(HuisGrid.Visibility == Visibility.Visible)
+            {
+                HuisGrid.Visibility = Visibility.Hidden;
+            } 
+            else
+            {
+                HuisGrid.Visibility = Visibility.Visible;
+            }
+
+
+            if (SpelerGrid.Visibility == Visibility.Visible)
+            {
+                SpelerGrid.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                SpelerGrid.Visibility = Visibility.Visible;
+            }
+        }
     }
 
 

@@ -97,6 +97,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="img\background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -107,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\Schoppen-aas.png" />
+    <Resource Include="img\Achterkant.png" />
     <Content Include="img\Klaveren-10.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

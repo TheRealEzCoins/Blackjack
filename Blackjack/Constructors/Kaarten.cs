@@ -47,11 +47,17 @@ namespace Blackjack
             return nummer;
         }
 
+        public void setNummer(int Nummer)
+        {
+            nummer = Nummer;
+        }
+
 
         public BitmapImage getBitmap() 
         {
             return bitmap;
         }
+
 
         public Image GetImage()
         {
