@@ -59,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="History.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,10 +71,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constructors\Cards.cs" />
     <Compile Include="Enums\PlayerType.cs" />
     <Compile Include="Enums\GameState.cs" />
     <Compile Include="Handlers\ImageHandler.cs" />
-    <Compile Include="Constructors\Kaarten.cs" />
+    <Compile Include="History.xaml.cs">
+      <DependentUpon>History.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\KnoppenUtils.cs" />
     <Compile Include="Constructors\Speler.cs" />
     <Compile Include="Utils\Utils.cs" />
@@ -109,17 +116,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\Schoppen-aas.png" />
-    <Resource Include="img\Achterkant.png" />
-    <Content Include="img\Klaveren-10.png">
+    <Resource Include="img\Schoppen-aas.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\Ruiten-10.png">
+    </Resource>
+    <Resource Include="img\Achterkant.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\Harten-10.png">
+    </Resource>
+    <Resource Include="img\Klaveren-10.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Resource>
+    <Resource Include="img\Ruiten-10.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\Harten-10.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\Schoppen-10.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -174,9 +185,9 @@
     <Resource Include="img\Klaveren-6.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="img\Ruiten-6.png">
+    <Resource Include="img\Ruiten-6.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Resource>
     <Resource Include="img\Harten-6.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

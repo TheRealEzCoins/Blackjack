@@ -4,6 +4,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Blackjack
 {
@@ -11,6 +12,9 @@ namespace Blackjack
     {
         private static Random rnd = new Random();
         private static bool isRevealed = false;
+        private static DispatcherTimer dispatcher;
+        private static int Round = 1;
+        public static String History = "";
 
         public static bool GetRandomBool()
         {
@@ -23,71 +27,59 @@ namespace Blackjack
                 return false;
         }
 
-        public static Kaarten randomKaart()
+        public static Cards RandomCard()
         {
-            int kaart = rnd.Next(Kaarten.KaartenLijst.Count);
-            return Kaarten.KaartenLijst[kaart];
+            int kaart = rnd.Next(Cards.CardList.Count);
+            return Cards.CardList[kaart];
         }
 
-
-        public static void handleCards(Kaarten kaart, TextBlock block)
+        // Handles each image's card interaction 
+        public static void HandleCards(Cards kaart, TextBlock block)
         {
-            if (Kaarten.KaartenLijst.Count == 0)
+            if (Cards.CardList.Count == 0)
             {
                 Utils.Shuffle();
             }
             MainWindow window = MainWindow.GetClass();
             if (block == window.KaartenSpeler)
             {
-                block.Text = Speler.GetSpeler(PlayerType.Speler).VertaalKaart();
-                int i = Speler.GetSpeler(PlayerType.Speler).getKaarten().Count - 1;
-                ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Speler));
+                block.Text = Player.GetPlayer(PlayerType.Speler).TranslateCard();
+                int i = Player.GetPlayer(PlayerType.Speler).GetCards().Count - 1;
+                ImageHandler.setImage(kaart, Player.GetPlayer(PlayerType.Speler));
             }
             if (block == window.KaartenHuis)
             {
-                block.Text = Speler.GetSpeler(PlayerType.Huis).VertaalKaart();
-                ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Huis));
+                block.Text = Player.GetPlayer(PlayerType.Huis).TranslateCard();
+                ImageHandler.setImage(kaart, Player.GetPlayer(PlayerType.Huis));
             }
         }
 
-        public static void handleHiddenCard(Kaarten kaart, TextBlock block)
+        // Handles the hidden cards interaction
+        public static void HandleHiddenCard(Cards kaart, TextBlock block)
         {
             MainWindow window = MainWindow.GetClass();
             if (block == window.KaartenSpeler)
-                block.Text = Speler.GetSpeler(PlayerType.Speler).VertaalKaart();
+                block.Text = Player.GetPlayer(PlayerType.Speler).TranslateCard();
             if (block == window.KaartenHuis)
             {
                 if (!isRevealed)
                 {
                     block.Text = block.Text + "????" + "\n";
                     isRevealed = true;
-                    ImageHandler.setHiddenImage(Speler.GetSpeler(PlayerType.Huis));
+                    ImageHandler.setHiddenImage(Player.GetPlayer(PlayerType.Huis));
                 }
                 else
                 {
-                    int nr = kaart.getNummer();
-                    string naam = kaart.getNaam();
+                    int nr = kaart.GetNumber();
+                    string naam = kaart.GetName();
                     block.Text = block.Text + nr + " " + naam + "\n";
-                    ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Huis));
+                    ImageHandler.setImage(kaart, Player.GetPlayer(PlayerType.Huis));
                 }
             }
 
         }
 
-        public static string readList(List<Kaarten> list)
-        {
-            string s = "";
-
-            foreach (Kaarten kaart in list)
-            {
-                string KaartNaam = kaart.getNaam();
-                string KaartNr = kaart.getNummer().ToString();
-                s = s + "\n" + KaartNaam;
-            }
-
-            return s;
-        }
-
+        // Schuffles the deck
         public static void Shuffle()
         {
             String[] KaartenNamenIrregulair = { "Schoppen", "Harten", "Klaveren", "Ruiten" };
@@ -99,9 +91,9 @@ namespace Blackjack
             {
                 foreach (string s in KaartenNamenIrregulair)
                 {
-                    if (!Kaarten.KaartenLijst.Contains(new Kaarten(s, i, GetBitmapImage(s, i))))
+                    if (!Cards.CardList.Contains(new Cards(s, i, GetBitmapImage(s, i))))
                     {
-                        new Kaarten(s, i, GetBitmapImage(s, i));
+                        new Cards(s, i, GetBitmapImage(s, i));
                     }
                 }
             }
@@ -111,23 +103,25 @@ namespace Blackjack
             {
                 foreach(string s in KaartenNamenRegulair)
                 {
-                  new Kaarten(irr + " " + s, 10, GetBitmapImage(irr, s));
+                  new Cards(irr + " " + s, 10, GetBitmapImage(irr, s));
                 }
             }
 
 
             foreach(String s in KaartenNamenIrregulair)
             {
-                new Kaarten(s, 0, GetBitmapImage(s, 0), true);
+                new Cards(s, 0, GetBitmapImage(s, 0), true);
             }
+
         }
 
+        // Resets the current round
         public static void ResetGame()
         {
             MainWindow mainWindow = MainWindow.GetClass();
-            foreach (Speler speler in Speler.Spelers)
+            foreach (Player speler in Player.PlayerList)
             {
-                speler.getKaarten().Clear();
+                speler.GetCards().Clear();
             }
             mainWindow.Hit.IsEnabled = false;
             mainWindow.Sta.IsEnabled = false;
@@ -145,24 +139,27 @@ namespace Blackjack
             MainWindow.gameState = GameState.Stopped;
         }
 
+        // Restarts the entire game
         public static void RestartGame()
         {
             MainWindow mainWindow = MainWindow.GetClass();
             ResetGame();
-            Speler.Spelers.Clear();
-            new Speler(PlayerType.Speler, "Speler", 250);
-            new Speler(PlayerType.Huis, "Huis");
+            Player.PlayerList.Clear();
+            new Player(PlayerType.Speler, "Speler", 250);
+            new Player(PlayerType.Huis, "Huis");
 
+            Cards.CardList.Clear();
             Utils.Shuffle();
-            mainWindow.AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
-            mainWindow.Kapitaal.Text = Speler.GetSpeler(PlayerType.Speler).GetGeld().ToString();
+            mainWindow.AantalKaarten.Text = Cards.CardList.Count.ToString();
+            mainWindow.Kapitaal.Text = Player.GetPlayer(PlayerType.Speler).GetMoney().ToString();
         }
 
-        public static bool ValidateMoney(int input, Speler speler)
+        // Check if the money the player has is correct to an input
+        public static bool ValidateMoney(int input, Player speler)
         {
-            int spelerGeld = speler.GetGeld();
+            int spelerGeld = speler.GetMoney();
             int minBet = (spelerGeld / 100) * 10;
-            if (input < spelerGeld && input > minBet)
+            if (input <= spelerGeld && input >= minBet)
             {
                 return true;
             }
@@ -173,45 +170,73 @@ namespace Blackjack
             }
         }
 
-        public static void updateKapitaal()
+        // Updates the money display TextBox in the XAML
+        public static void UpdateMoneyDisplay()
         {
-            MainWindow.GetClass().Kapitaal.Text = Speler.GetSpeler(PlayerType.Speler).GetGeld().ToString();
+            MainWindow.GetClass().Kapitaal.Text = Player.GetPlayer(PlayerType.Speler).GetMoney().ToString();
         }
 
-        public static void lose()
+        // Method ran when the player loses
+        public static void Lose()
         {
-            int bet = Speler.GetSpeler(PlayerType.Speler).GetBet();
-            int geld = Speler.GetSpeler(PlayerType.Speler).GetGeld();
+            int bet = Player.GetPlayer(PlayerType.Speler).GetBet();
+            int geld = Player.GetPlayer(PlayerType.Speler).GetMoney();
             int newGeld = geld - bet;
             MessageBox.Show("You Lose!");
-            Speler.GetSpeler(PlayerType.Speler).SetGeld(newGeld);
-            Speler.GetSpeler(PlayerType.Speler).SetBet(0);
-            updateKapitaal();
+            Player.GetPlayer(PlayerType.Speler).SetMoney(newGeld);
+            Player.GetPlayer(PlayerType.Speler).SetBet(0);
+            UpdateMoneyDisplay();
+            History = History +
+                "\n Round " +
+                Round +
+                " - -" +
+                bet +
+                " " + Player.GetPlayer(PlayerType.Speler).TotalCardNumber() +
+                " / " + Player.GetPlayer(PlayerType.Huis).TotalCardNumber();
             Utils.ResetGame();
+            Round++;
             return;
         }
 
-        public static void win()
+        // Method ran when the player wins
+        public static void Win()
         {
-            int bet = Speler.GetSpeler(PlayerType.Speler).GetBet();
-            int geld = Speler.GetSpeler(PlayerType.Speler).GetGeld();
-            MessageBox.Show("You win!");
-            Speler.GetSpeler(PlayerType.Speler).SetGeld(geld + (bet * 2));
-            Speler.GetSpeler(PlayerType.Speler).SetBet(0);
-            updateKapitaal();
+            int bet = Player.GetPlayer(PlayerType.Speler).GetBet();
+            int geld = Player.GetPlayer(PlayerType.Speler).GetMoney();
+            MessageBox.Show("You Win!");
+            Player.GetPlayer(PlayerType.Speler).SetMoney(geld + (bet * 2));
+            Player.GetPlayer(PlayerType.Speler).SetBet(0);
+            UpdateMoneyDisplay();
+            History = History +
+                "\n Round " +
+                Round +
+                " - +" +
+                bet +
+                " " + Player.GetPlayer(PlayerType.Speler).TotalCardNumber() +
+                " / " + Player.GetPlayer(PlayerType.Huis).TotalCardNumber();
             Utils.ResetGame();
+            Round++;
             return;
         }
 
-        public static void draw()
+        // Method ran when the player draws
+        public static void Draw()
         {
             MessageBox.Show("Draw!"); 
-            Speler.GetSpeler(PlayerType.Speler).SetBet(0);
-            updateKapitaal();
+            Player.GetPlayer(PlayerType.Speler).SetBet(0);
+            UpdateMoneyDisplay();
+            History = History +
+                "\n Round " +
+                Round +
+                " - DRAW " 
+                + Player.GetPlayer(PlayerType.Speler).TotalCardNumber() +
+                " / " + Player.GetPlayer(PlayerType.Huis).TotalCardNumber();
             Utils.ResetGame();
+            Round++;
             return;
         }
 
+        // Get the bitmap image related to a card
         public static BitmapImage GetBitmapImage(String naam, int nummer)
         {
             if(nummer == 0)
@@ -222,17 +247,36 @@ namespace Blackjack
           
         }
 
+        // Get the bitmap image related to a card (Aas only)
         public static BitmapImage GetBitmapImage(String vorm, String naam)
         {        
                 return new BitmapImage(new Uri("img/" + vorm + "-" + naam + ".png", UriKind.Relative));
         }
 
+        // Used to translate a BitmapImage to an Image
         public static Image TranslateBitMapImage(BitmapImage bitmapImage)
         {
             BitmapImage image = bitmapImage;
             Image img = new Image();
             img.Source = image;
             return img;
+        }
+
+        // Method for updating the current time displayed in the XAML
+        public static void UpdateTimer()
+        {
+            dispatcher = new DispatcherTimer();
+            dispatcher.Interval = new TimeSpan(0, 0, 1);
+            dispatcher.Start();
+            dispatcher.Tick += new EventHandler(DateTimeDispatcher);
+        }
+
+        // Dispatcher for the method above
+        private static void DateTimeDispatcher(Object sender, EventArgs e)
+        {
+            String now = DateTime.Now.ToString("HH:mm:ss");
+            MainWindow window = MainWindow.GetClass();
+            window.Time.Text = now;
         }
     }
         

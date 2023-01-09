@@ -13,7 +13,7 @@ namespace Blackjack
         public static Thickness hiddenImage;
         public static Boolean IsHidden = true;
        
-        public static void setImage(Kaarten kaart, Speler speler)
+        public static void setImage(Cards kaart, Player speler)
         {
            MainWindow window = MainWindow.GetClass();
            if(speler.GetPlayerType() == PlayerType.Speler)
@@ -23,7 +23,7 @@ namespace Blackjack
                 Image image = kaart.GetImage();
                 image.Width = 30;
                 image.Height = canvas.Height;
-                image.Margin = new Thickness(30 * speler.getKaarten().Count ,0 ,0 ,0);
+                image.Margin = new Thickness(30 * speler.GetCards().Count ,0 ,0 ,0);
 
 
                 canvas.Children.Add(image);
@@ -35,14 +35,14 @@ namespace Blackjack
                 Image image = kaart.GetImage();
                 image.Width = 30;
                 image.Height = canvas.Height;
-                image.Margin = new Thickness(30 * speler.getKaarten().Count, 0, 0, 0);
+                image.Margin = new Thickness(30 * speler.GetCards().Count, 0, 0, 0);
 
 
                 canvas.Children.Add(image);
            }
         }
 
-        public static void setHiddenImage(Speler speler)
+        public static void setHiddenImage(Player speler)
         {
             MainWindow window = MainWindow.GetClass();
             if (speler.GetPlayerType() == PlayerType.Speler)
@@ -52,7 +52,7 @@ namespace Blackjack
                 Image image = Utils.TranslateBitMapImage(new BitmapImage(new Uri(@"/img/Achterkant.png", UriKind.Relative)));
                 image.Width = 30;
                 image.Height = canvas.Height;
-                image.Margin = new Thickness(30 * speler.getKaarten().Count, 0, 0, 0);
+                image.Margin = new Thickness(30 * speler.GetCards().Count, 0, 0, 0);
 
 
                 canvas.Children.Add(image);
@@ -64,9 +64,9 @@ namespace Blackjack
                 Image image = Utils.TranslateBitMapImage(new BitmapImage(new Uri(@"/img/Achterkant.png", UriKind.Relative)));
                 image.Width = 30;
                 image.Height = canvas.Height;
-                image.Margin = new Thickness(30 * speler.getKaarten().Count, 0, 0, 0);
+                image.Margin = new Thickness(30 * speler.GetCards().Count, 0, 0, 0);
 
-                hiddenImage = new Thickness(30 * speler.getKaarten().Count, 0, 0, 0);
+                hiddenImage = new Thickness(30 * speler.GetCards().Count, 0, 0, 0);
 
                 canvas.Children.Add(image);
             }
@@ -79,7 +79,7 @@ namespace Blackjack
                 MainWindow window = MainWindow.GetClass();
                 Canvas canvas = window.HuisCanvas;
                 canvas.Children.RemoveAt(0);
-                Kaarten kaart = Speler.GetSpeler(PlayerType.Huis).getKaarten()[0];
+                Cards kaart = Player.GetPlayer(PlayerType.Huis).GetCards()[0];
 
                 Image image = kaart.GetImage();
                 image.Width = 30;
@@ -103,7 +103,7 @@ namespace Blackjack
             window.DoubleKaart.Source = image.Source;
         }
 
-        public static void RevealDoubleDownImage(Kaarten kaarten)
+        public static void RevealDoubleDownImage(Cards kaarten)
         {
             MainWindow window = MainWindow.GetClass();
             Image image = kaarten.GetImage();

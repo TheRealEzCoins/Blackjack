@@ -15,7 +15,7 @@
                 <MenuItem Header="Menu" Background="Gray">
                     <MenuItem Header="Historiek" Click="Historiek_Click"/>
                     <MenuItem Header="Debug" Click="Debug_Click" IsCheckable="True"/>
-                   
+
                 </MenuItem>
             </Menu>
         </StackPanel>
@@ -44,7 +44,7 @@
             </Button>
         </Viewbox>
         <Viewbox>
-            <Button x:Name="Deel" Content="Deel" HorizontalAlignment="Center" Height="28" Margin="0,160,0,222" VerticalAlignment="Top" Width="74" Click="Deel_Click"/>
+            <Button x:Name="Deel" Content="Draw" HorizontalAlignment="Center" Height="28" Margin="0,160,0,222" VerticalAlignment="Top" Width="74" Click="Deel_Click"/>
         </Viewbox>
         <Grid HorizontalAlignment="Left" Height="185" Margin="103,93,0,0" VerticalAlignment="Top" Width="140" Visibility="Hidden" Name="SpelerGrid">
             <Label Content="Speler" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="139"/>
@@ -55,10 +55,10 @@
             <TextBlock x:Name="KaartenHuis" HorizontalAlignment="Left" Margin="0,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="152" Width="139"/>
         </Grid>
         <Viewbox>
-            <TextBlock x:Name="txtSpelerTotaal" HorizontalAlignment="Left" Margin="-293,344,417,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
+            <TextBlock x:Name="txtSpelerTotaal" HorizontalAlignment="Left" Margin="-293,344,417,0" TextWrapping="Wrap" Visibility="Hidden" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
         </Viewbox>
         <Viewbox>
-            <TextBlock x:Name="txtHuisTotaal" HorizontalAlignment="Left" Margin="711,344,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
+            <TextBlock x:Name="txtHuisTotaal" HorizontalAlignment="Left" Margin="711,344,0,0" TextWrapping="Wrap" Visibility="Hidden" VerticalAlignment="Top" Height="90" Width="89" TextAlignment="Center" FontSize="48" FontWeight="Bold"/>
         </Viewbox>
         <Viewbox>
             <Canvas Name="SpelerCanvas" Margin="-184,160,59,69" Width="150" Height="48" FlowDirection="RightToLeft" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
@@ -161,6 +161,9 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
+        </Viewbox>
+        <Viewbox>
+            <TextBlock Margin="361,407,361,0" Name="Time" Background="#FF7F7171" Width="66"/>
         </Viewbox>
     </Grid>
 </Window>

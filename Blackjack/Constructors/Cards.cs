@@ -53,7 +53,7 @@ namespace Blackjack
         }
 
 
-        public BitmapImage GetBitmap() 
+        public BitmapImage GetBitmap()
         {
             return _bitmap;
         }

@@ -15,61 +15,65 @@ namespace Blackjack
 
         private static DispatcherTimer dispatcher;
         private static DispatcherTimer staDispatcher;
-        public static void Staan()
+        // Check the Total of both player and dealer if one of them reached a criteria run one of the 3 events.
+        public static void CheckEndState()
         {
 
-            int SpelerTotaal = Speler.GetSpeler(PlayerType.Speler).TotaalAantal();
-            int HuisTotaal = Speler.GetSpeler(PlayerType.Huis).TotaalAantal();
+            int SpelerTotaal = Player.GetPlayer(PlayerType.Speler).TotalCardNumber();
+            int HuisTotaal = Player.GetPlayer(PlayerType.Huis).TotalCardNumber();
             if (SpelerTotaal > 21)
             {
-                Utils.lose();
+                Utils.Lose();
                 return;
             }
 
             if (HuisTotaal > 21)
             {
-                Utils.win();
+                Utils.Win();
                 return;
             }
            
             if (SpelerTotaal > HuisTotaal)
             {
-                Utils.win();
+                Utils.Win();
                 return;
             }
 
             if (SpelerTotaal == HuisTotaal)
             {
-                Utils.draw();
+                Utils.Draw();
                 return;
             }
 
             if (SpelerTotaal < HuisTotaal)
             {
-                Utils.lose();
+                Utils.Lose();
                 return;
             }
+
         }
 
-        public static void checkState()
+        // Smaller version of the version above
+        public static void CheckState()
         {
-            int SpelerTotaal = Speler.GetSpeler(PlayerType.Speler).TotaalAantal();
-            int HuisTotaal = Speler.GetSpeler(PlayerType.Huis).TotaalAantal();
+            int SpelerTotaal = Player.GetPlayer(PlayerType.Speler).TotalCardNumber();
+            int HuisTotaal = Player.GetPlayer(PlayerType.Huis).TotalCardNumber();
             if (SpelerTotaal > 21)
             {
-                Utils.lose();
+                Utils.Lose();
                 return;
             }
 
             if (HuisTotaal > 21)
             {
-                Utils.win();
+                Utils.Win();
                 return;
             }
 
         }
 
-        public static void Deel()
+        // Draw 2 cards for each person and hide 1 card in the dealer's hand
+        public static void DrawCards()
         {
             dispatcher = new DispatcherTimer();
             dispatcher.Interval = new TimeSpan(0, 0, 1);
@@ -85,11 +89,11 @@ namespace Blackjack
                 window.Double.IsEnabled = true;
                 
                 int bet = int.Parse(MainWindow.GetClass().BetBlock.Text);
-                Speler.GetSpeler(PlayerType.Speler).SetBet(bet);
+                Player.GetPlayer(PlayerType.Speler).SetBet(bet);
                 window.Inzet.Text = bet.ToString();
  
-                dispatcher.Tick += new EventHandler(DeelDispatcher);
-                KnoppenUtils.checkState();
+                dispatcher.Tick += new EventHandler(DrawDispatcher);
+                KnoppenUtils.CheckState();
             }
             else
             {
@@ -97,36 +101,39 @@ namespace Blackjack
             }
         }
 
-        private static void DeelDispatcher(object sender, EventArgs e)
+        // Dispatcher to make the cards appear slower
+        private static void DrawDispatcher(object sender, EventArgs e)
         {
-            if (Speler.GetSpeler(PlayerType.Speler).getKaarten().Count < 2)
+            if (Player.GetPlayer(PlayerType.Speler).GetCards().Count < 2)
             {
-                if (Kaarten.KaartenLijst.Count == 0)
+                if (Cards.CardList.Count == 0)
                 {
                     Utils.Shuffle();
+                    MessageBox.Show("Shuffling!");
                 }
                 MainWindow window = MainWindow.GetClass();
-                Kaarten kaart = Utils.randomKaart();
-                Speler.GetSpeler(PlayerType.Speler).VoegKaartToe(kaart);
-                Utils.handleCards(kaart, window.KaartenSpeler);
-                window.txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();
+                Cards kaart = Utils.RandomCard();
+                Player.GetPlayer(PlayerType.Speler).AddCard(kaart);
+                Utils.HandleCards(kaart, window.KaartenSpeler);
+                window.txtSpelerTotaal.Text = Player.GetPlayer(PlayerType.Speler).TotalCardNumber().ToString();
             } 
             else
             {
                 dispatcher.Stop();
             }
 
-            if (Speler.GetSpeler(PlayerType.Huis).getKaarten().Count < 2)
+            if (Player.GetPlayer(PlayerType.Huis).GetCards().Count < 2)
             {
-                if (Kaarten.KaartenLijst.Count == 0)
+                if (Cards.CardList.Count == 0)
                 {
                     Utils.Shuffle();
+                    MessageBox.Show("Shuffling!");
                 }
                 MainWindow window = MainWindow.GetClass();
-                Kaarten kaart = Utils.randomKaart();
-                Speler.GetSpeler(PlayerType.Huis).VoegKaartToe(kaart);
-                Utils.handleHiddenCard(kaart, window.KaartenHuis);
-                window.txtHuisTotaal.Text = Speler.GetSpeler(PlayerType.Huis).TotaalAantal().ToString();
+                Cards kaart = Utils.RandomCard();
+                Player.GetPlayer(PlayerType.Huis).AddCard(kaart);
+                Utils.HandleHiddenCard(kaart, window.KaartenHuis);
+                window.txtHuisTotaal.Text = Player.GetPlayer(PlayerType.Huis).TotalCardNumber().ToString();
             }
             else
             {
@@ -135,7 +142,8 @@ namespace Blackjack
         }
 
 
-        public static void Sta() 
+        // Stand logic
+        public static void Stand() 
         {
             staDispatcher = new DispatcherTimer();
             staDispatcher.Interval = new TimeSpan(0, 0, 1);
@@ -144,21 +152,21 @@ namespace Blackjack
             window.Double.IsEnabled = false;
             ImageHandler.revealImage();
 
-            staDispatcher.Tick += new EventHandler(StaDispatcher);
+            staDispatcher.Tick += new EventHandler(StandDispatcher);
 
         }
 
 
-
-        private static void StaDispatcher(Object sender, EventArgs e)
+        // Dispatcher which will keep giving cards to the dealer untill they reach a < 16 score
+        private static void StandDispatcher(Object sender, EventArgs e)
         {
             MainWindow window = MainWindow.GetClass();
-            if(Speler.GetSpeler(PlayerType.Huis).TotaalAantal() < 16)
+            if(Player.GetPlayer(PlayerType.Huis).TotalCardNumber() < 16)
             {
-                Kaarten kaart = Utils.randomKaart();
-                Speler.GetSpeler(PlayerType.Huis).VoegKaartToe(kaart);
-                Utils.handleCards(kaart, window.KaartenHuis);
-                window.txtHuisTotaal.Text = Speler.GetSpeler(PlayerType.Huis).TotaalAantal().ToString();
+                Cards kaart = Utils.RandomCard();
+                Player.GetPlayer(PlayerType.Huis).AddCard(kaart);
+                Utils.HandleCards(kaart, window.KaartenHuis);
+                window.txtHuisTotaal.Text = Player.GetPlayer(PlayerType.Huis).TotalCardNumber().ToString();
             }
             else
             {
@@ -167,17 +175,18 @@ namespace Blackjack
                     KnoppenUtils.DoubleDownImageReveal();
                 }
                 staDispatcher.Stop();
-                KnoppenUtils.Staan();
+                KnoppenUtils.CheckEndState();
             }
         }
 
+        // Reveals the double down card
         public static void DoubleDownImageReveal()
         {
             MainWindow window = MainWindow.GetClass();
-            Kaarten extraKaart = Utils.randomKaart();
-            Speler.GetSpeler(PlayerType.Speler).VoegKaartToe(extraKaart);
+            Cards extraKaart = Utils.RandomCard();
+            Player.GetPlayer(PlayerType.Speler).AddCard(extraKaart);
             ImageHandler.RevealDoubleDownImage(extraKaart);
-            window.txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();
+            window.txtSpelerTotaal.Text = Player.GetPlayer(PlayerType.Speler).TotalCardNumber().ToString();
         }
     }
 }

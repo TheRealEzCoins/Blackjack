@@ -5,102 +5,104 @@ using System.Windows.Controls;
 
 namespace Blackjack
 {
-    public class Speler
+    public class Player
     {
-        private String Naam;
-        private int Geld;
-        private List<Kaarten> Kaarten;
+        private String _name;
+        private int _money;
+        private List<Cards> _cards;
 
-        public static List<Speler> Spelers = new List<Speler>();
-        private PlayerType PlayerType { get; set; }
-        private int Bet;
-        public Speler(PlayerType type, String naam, int geld)
+        public static List<Player> PlayerList = new List<Player>();
+        private PlayerType _playerType { get; set; }
+        private int _bet;
+        public Player(PlayerType type, String name, int money)
         {
-           
-            Naam = naam;
-            Geld = geld;
-            Kaarten = new List<Kaarten>();
-            PlayerType = type;
-            Bet = 0;
-            Spelers.Add(this);
+
+            _name = name;
+            _money = money;
+            _cards = new List<Cards>();
+            _playerType = type;
+            _bet = 0;
+            PlayerList.Add(this);
 
         }
 
-        public Speler(PlayerType type, String naam)
+        public Player(PlayerType type, String name)
         {
-           
-            Naam = naam;
-            Geld = 0;
-            Kaarten = new List<Kaarten>();
-            PlayerType = type;
-            Spelers.Add(this);
+
+            _name = name;
+            _money = 0;
+            _cards = new List<Cards>();
+            _playerType = type;
+            PlayerList.Add(this);
 
         }
 
-        public int GetGeld() { return Geld; }
-        public void SetGeld(int Geld) { this.Geld = Geld; }
+        public int GetMoney() { return _money; }
+        public void SetMoney(int Geld) { this._money = Geld; }
         public int GetBet()
         {
-            return Bet;
+            return _bet;
         }
 
 
-        public void RemoveGeld(int value)
+        public void RemoveMoney(int value)
         {
-            Geld =- value;
+            _money = -value;
         }
 
         public PlayerType GetPlayerType()
         {
-            return PlayerType;
+            return _playerType;
         }
 
-        public int TotaalAantal()
+        public int TotalCardNumber()
         {
             int i = 0;
-            foreach (Kaarten k in Kaarten)
+            foreach (Cards k in _cards)
             {
-                i += k.getNummer();
+                i += k.GetNumber();
             }
 
             return i;
         }
 
-        public List<Kaarten> getKaarten()
+        public List<Cards> GetCards()
         {
-            return Kaarten;
+            return _cards;
         }
 
-        public void VoegKaartToe(Kaarten kaart)
+        public void AddCard(Cards card)
         {
-            if (kaart.getNummer() == 0)
+            MainWindow window = MainWindow.GetClass();
+            if (card.GetNumber() == 0)
             {
-                if(TotaalAantal() + 11 <= 21)
+                if (TotalCardNumber() + 11 < 21)
                 {
-                    kaart.setNummer(11);
-                } else
+                    card.SetNumber(11);
+                }
+                else
                 {
-                    kaart.setNummer(1);
+                    card.SetNumber(1);
                 }
             }
-            Kaarten.Add(kaart);
-            Blackjack.Kaarten.KaartenLijst.Remove(kaart);
-            MainWindow.GetClass().AantalKaarten.Text = Blackjack.Kaarten.KaartenLijst.Count.ToString();
+            _cards.Add(card);
+            Cards.CardList.Remove(card);
+            window.AantalKaarten.Text = Cards.CardList.Count.ToString();
         }
-        
+
         public void SetBet(int value)
         {
-            Bet = value;
+            _bet = value;
         }
 
 
-        public String VertaalKaart()
+        public String TranslateCard()
         {
             StringBuilder s = new StringBuilder();
-            foreach (Kaarten k in Kaarten)
+            foreach (Cards k in _cards)
             {
-                String nr = k.getNummer().ToString();
-                String naam = k.getNaam();
+                String nr = k.GetNumber().ToString();
+                String naam = k.GetName();
                 s.Append(nr + " " + naam + "\n");
             }
 
@@ -108,11 +110,11 @@ namespace Blackjack
 
         }
 
-        public static Speler GetSpeler(PlayerType type)
+        public static Player GetPlayer(PlayerType type)
         {
-            foreach (Speler s in Spelers)
+            foreach (Player s in PlayerList)
             {
-                if (s.PlayerType == type) return s;
+                if (s._playerType == type) return s;
             }
             return null;
         }

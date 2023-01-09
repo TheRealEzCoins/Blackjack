@@ -24,12 +24,13 @@ namespace Blackjack
             InitializeComponent();
             window = this;
 
-            new Speler(PlayerType.Speler, "Speler", 250);
-            new Speler(PlayerType.Huis, "Huis");
+            Utils.UpdateTimer();
+            new Player(PlayerType.Speler, "Speler", 250);
+            new Player(PlayerType.Huis, "Huis");
 
             Utils.Shuffle();
-            AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
-            Kapitaal.Text = Speler.GetSpeler(PlayerType.Speler).GetGeld().ToString();
+            AantalKaarten.Text = Cards.CardList.Count.ToString();
+            Kapitaal.Text = Player.GetPlayer(PlayerType.Speler).GetMoney().ToString();
 
         }
 
@@ -37,9 +38,9 @@ namespace Blackjack
         {
            
             int SetBet = (int)Math.Round(Bet.Value, 0);
-            if (Utils.ValidateMoney(SetBet, Speler.GetSpeler(PlayerType.Speler)))
+            if (Utils.ValidateMoney(SetBet, Player.GetPlayer(PlayerType.Speler)))
             {
-                KnoppenUtils.Deel();
+                KnoppenUtils.DrawCards();
             }
 
            
@@ -49,14 +50,14 @@ namespace Blackjack
         {
             if (gameState.Equals(GameState.Running))
             {
-                Kaarten Kaart = Utils.randomKaart();
-                Speler.GetSpeler(PlayerType.Speler).VoegKaartToe(Kaart);
-                Utils.handleCards(Kaart, KaartenSpeler);
-                txtSpelerTotaal.Text = Speler.GetSpeler(PlayerType.Speler).TotaalAantal().ToString();
+                Cards Kaart = Utils.RandomCard();
+                Player.GetPlayer(PlayerType.Speler).AddCard(Kaart);
+                Utils.HandleCards(Kaart, KaartenSpeler);
+                txtSpelerTotaal.Text = Player.GetPlayer(PlayerType.Speler).TotalCardNumber().ToString();
                 ImageHandler.revealImage();
               
                 Double.IsEnabled = false;
-                KnoppenUtils.checkState();
+                KnoppenUtils.CheckState();
             }
             else
             {
@@ -68,12 +69,13 @@ namespace Blackjack
 
         private void Sta_Click(object sender, RoutedEventArgs e)
         {
-            KnoppenUtils.Sta();
+            KnoppenUtils.Stand();
         }
 
         private void Historiek_Click(object sender, RoutedEventArgs e)
         {
-            
+            History history = new History();
+            history.Show();
         }
 
 
@@ -90,16 +92,16 @@ namespace Blackjack
 
         private void Double_Click(object sender, RoutedEventArgs e)
         {
-            int currBet = Speler.GetSpeler(PlayerType.Speler).GetBet();
-            if (Utils.ValidateMoney(currBet * 2, Speler.GetSpeler(PlayerType.Speler)))
+            int currBet = Player.GetPlayer(PlayerType.Speler).GetBet();
+            if (Utils.ValidateMoney(currBet * 2, Player.GetPlayer(PlayerType.Speler)))
             {
                 Double.IsEnabled = false;
-                Speler.GetSpeler(PlayerType.Speler).SetBet(currBet * 2);
+                Player.GetPlayer(PlayerType.Speler).SetBet(currBet * 2);
                 MessageBox.Show("Doubled!");
 
                 ImageHandler.AssignDoubleDownImage();
 
-                window.Inzet.Text = Speler.GetSpeler(PlayerType.Speler).GetBet().ToString();
+                window.Inzet.Text = Player.GetPlayer(PlayerType.Speler).GetBet().ToString();
                 Sta_Click(sender, e);
             }
         }

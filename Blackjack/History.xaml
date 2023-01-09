@@ -1,0 +1,19 @@
+﻿<Window x:Class="Blackjack.History"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blackjack"
+        mc:Ignorable="d"
+        Title="History" Height="450" Width="200">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" >
+        <Grid>
+            <WrapPanel>
+                <TextBlock Text="Game History" TextAlignment="Center" Width="200"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,17,0,0">
+                <TextBlock Name="History_Text" Width="auto" Height="auto" />
+            </WrapPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>
