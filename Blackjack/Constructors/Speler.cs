@@ -75,7 +75,7 @@ namespace Blackjack
         {
             if (kaart.getNummer() == 0)
             {
-                if(TotaalAantal() + 11 < 21)
+                if(TotaalAantal() + 11 <= 21)
                 {
                     kaart.setNummer(11);
                 } else
@@ -84,6 +84,8 @@ namespace Blackjack
                 }
             }
             Kaarten.Add(kaart);
+            Blackjack.Kaarten.KaartenLijst.Remove(kaart);
+            MainWindow.GetClass().AantalKaarten.Text = Blackjack.Kaarten.KaartenLijst.Count.ToString();
         }
         
         public void SetBet(int value)

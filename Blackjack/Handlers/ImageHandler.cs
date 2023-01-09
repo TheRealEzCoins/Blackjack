@@ -91,6 +91,29 @@ namespace Blackjack
             }
 
         }
+
+
+        public static void AssignDoubleDownImage()
+        {
+            MainWindow window = MainWindow.GetClass();
+            Image image = Utils.TranslateBitMapImage(new BitmapImage(new Uri(@"/img/Achterkant.png", UriKind.Relative)));
+            RotateTransform rotateTransform = new RotateTransform(90);
+            window.DoubleKaart.RenderTransform = rotateTransform;
+
+            window.DoubleKaart.Source = image.Source;
+        }
+
+        public static void RevealDoubleDownImage(Kaarten kaarten)
+        {
+            MainWindow window = MainWindow.GetClass();
+            Image image = kaarten.GetImage();
+            RotateTransform rotateTransform = new RotateTransform(90);
+            window.DoubleKaart.RenderTransform = rotateTransform;
+
+            window.DoubleKaart.Source = image.Source;
+
+            
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 
 using System.Windows.Controls;
@@ -67,17 +68,12 @@ namespace Blackjack
 
         private void Sta_Click(object sender, RoutedEventArgs e)
         {
-            Double.IsEnabled = false;
-            ImageHandler.revealImage();
-            while (Speler.GetSpeler(PlayerType.Huis).TotaalAantal() < 16)
-            {
-                Kaarten kaart = Utils.randomKaart();
-                Speler.GetSpeler(PlayerType.Huis).VoegKaartToe(kaart);
-                Utils.handleCards(kaart, KaartenHuis);
-                txtHuisTotaal.Text = Speler.GetSpeler(PlayerType.Huis).TotaalAantal().ToString();
-            }
-            KnoppenUtils.Staan();
+            KnoppenUtils.Sta();
+        }
 
+        private void Historiek_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
 
@@ -100,7 +96,11 @@ namespace Blackjack
                 Double.IsEnabled = false;
                 Speler.GetSpeler(PlayerType.Speler).SetBet(currBet * 2);
                 MessageBox.Show("Doubled!");
+
+                ImageHandler.AssignDoubleDownImage();
+
                 window.Inzet.Text = Speler.GetSpeler(PlayerType.Speler).GetBet().ToString();
+                Sta_Click(sender, e);
             }
         }
 
@@ -125,6 +125,12 @@ namespace Blackjack
                 SpelerGrid.Visibility = Visibility.Visible;
             }
         }
+
+        private void Restart_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.RestartGame();
+        }
+
     }
 
 

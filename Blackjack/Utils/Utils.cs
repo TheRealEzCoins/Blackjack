@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -47,8 +48,6 @@ namespace Blackjack
                 block.Text = Speler.GetSpeler(PlayerType.Huis).VertaalKaart();
                 ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Huis));
             }
-            Kaarten.KaartenLijst.Remove(kaart);
-            window.AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
         }
 
         public static void handleHiddenCard(Kaarten kaart, TextBlock block)
@@ -72,8 +71,7 @@ namespace Blackjack
                     ImageHandler.setImage(kaart, Speler.GetSpeler(PlayerType.Huis));
                 }
             }
-            Kaarten.KaartenLijst.Remove(kaart);
-            window.AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
+
         }
 
         public static string readList(List<Kaarten> list)
@@ -124,7 +122,7 @@ namespace Blackjack
             }
         }
 
-        public static void restartGame()
+        public static void ResetGame()
         {
             MainWindow mainWindow = MainWindow.GetClass();
             foreach (Speler speler in Speler.Spelers)
@@ -143,7 +141,21 @@ namespace Blackjack
             ImageHandler.IsHidden = true;
             mainWindow.SpelerCanvas.Children.Clear();
             mainWindow.HuisCanvas.Children.Clear();
+            mainWindow.DoubleKaart.Source = null;
             MainWindow.gameState = GameState.Stopped;
+        }
+
+        public static void RestartGame()
+        {
+            MainWindow mainWindow = MainWindow.GetClass();
+            ResetGame();
+            Speler.Spelers.Clear();
+            new Speler(PlayerType.Speler, "Speler", 250);
+            new Speler(PlayerType.Huis, "Huis");
+
+            Utils.Shuffle();
+            mainWindow.AantalKaarten.Text = Kaarten.KaartenLijst.Count.ToString();
+            mainWindow.Kapitaal.Text = Speler.GetSpeler(PlayerType.Speler).GetGeld().ToString();
         }
 
         public static bool ValidateMoney(int input, Speler speler)
@@ -175,7 +187,7 @@ namespace Blackjack
             Speler.GetSpeler(PlayerType.Speler).SetGeld(newGeld);
             Speler.GetSpeler(PlayerType.Speler).SetBet(0);
             updateKapitaal();
-            Utils.restartGame();
+            Utils.ResetGame();
             return;
         }
 
@@ -187,7 +199,7 @@ namespace Blackjack
             Speler.GetSpeler(PlayerType.Speler).SetGeld(geld + (bet * 2));
             Speler.GetSpeler(PlayerType.Speler).SetBet(0);
             updateKapitaal();
-            Utils.restartGame();
+            Utils.ResetGame();
             return;
         }
 
@@ -196,7 +208,7 @@ namespace Blackjack
             MessageBox.Show("Draw!"); 
             Speler.GetSpeler(PlayerType.Speler).SetBet(0);
             updateKapitaal();
-            Utils.restartGame();
+            Utils.ResetGame();
             return;
         }
 
